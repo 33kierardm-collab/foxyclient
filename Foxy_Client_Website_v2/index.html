@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Foxy Client — Official</title>
+<style>
+:root{--bg:#080910;--panel:#11131e;--panel2:#171927;--line:#292c40;--text:#f4f3fb;--muted:#9da1b7;--accent:#a78bfa;--accent2:#7257ef;--good:#52d69a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,system-ui,Segoe UI,sans-serif;overflow-x:hidden}
+body:before,body:after{content:"";position:fixed;z-index:-1;pointer-events:none;filter:blur(65px);border-radius:50%;animation:float 13s ease-in-out infinite alternate}
+body:before{width:480px;height:480px;background:#6846d52c;top:-180px;left:10%}body:after{width:520px;height:520px;background:#342c9b24;right:-200px;bottom:-200px;animation-delay:-5s}
+@keyframes float{to{transform:translate(100px,80px) scale(1.18)}}@keyframes pulse{50%{box-shadow:0 0 0 7px #52d69a12}}@keyframes clickpop{50%{transform:scale(.96)}}@keyframes fadeup{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+*{scrollbar-color:#45405f #10111a;scrollbar-width:thin}a{color:inherit;text-decoration:none}button,input,select{font:inherit}
+.wrap{width:min(1160px,calc(100% - 38px));margin:auto}.top{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;position:relative;z-index:2}
+.brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:.08em}.logo{width:35px;height:35px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,#d5c7ff,#7557f0);color:#171126;font-weight:950;box-shadow:0 0 25px #9271ff55}
+nav{display:flex;gap:23px;color:#b6b8c9;font-size:13px}nav a:hover{color:white}.discord,.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #ffffff22;background:#ffffff08;border-radius:11px;padding:10px 15px;font-weight:700;font-size:13px;transition:.18s}
+.btn.primary{background:linear-gradient(120deg,#bba6ff,#8064f5);color:#171126;border:0}.btn:hover,.discord:hover{transform:translateY(-2px);border-color:#ad98ff;box-shadow:0 8px 25px #8064f522}.btn:active,.discord:active,button:active{animation:clickpop .18s}
+.hero{padding:72px 0 68px;display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:42px;min-height:550px}
+.tag{display:inline-flex;gap:8px;align-items:center;border:1px solid #9f83ff45;background:#a78bfa12;color:#d9ceff;padding:6px 11px;border-radius:30px;font-size:11px;letter-spacing:.1em;font-weight:750}
+.green{width:7px;height:7px;border-radius:50%;background:var(--good);display:inline-block;box-shadow:0 0 10px #52d69a;animation:pulse 2s infinite}
+h1{font-size:clamp(46px,6vw,76px);line-height:.99;letter-spacing:-.065em;margin:20px 0}h1 span{color:#bdaaff}.lead{color:var(--muted);max-width:490px;font-size:16px}.hero-actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:25px}
+.preview-frame{padding:9px;border:1px solid #ffffff24;border-radius:18px;background:#141520d9;box-shadow:0 25px 85px #0009,0 0 55px #8464ff18;animation:fadeup .8s ease both}
+.preview-frame img{width:100%;display:block;border-radius:11px;max-height:370px;object-fit:cover}.preview-caption{display:flex;justify-content:space-between;color:#989bb0;font-size:11px;padding:10px 5px 2px}
+section{padding:68px 0}.heading{text-align:center;margin-bottom:30px}.eyebrow{color:#b5a2ff;font-size:11px;letter-spacing:.16em;font-weight:800;text-transform:uppercase}.heading h2{font-size:clamp(30px,4vw,43px);letter-spacing:-.04em;margin:7px 0}.heading p{color:var(--muted);max-width:600px;margin:auto}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:linear-gradient(145deg,#151724eF,#10111aef);border:1px solid var(--line);border-radius:16px;padding:22px;transition:.2s;animation:fadeup .5s both}.card:hover{transform:translateY(-4px);border-color:#8e77dc88;box-shadow:0 15px 38px #0005}.ico{width:38px;height:38px;border:1px solid #9e82f744;background:#9e82f71a;color:#c7b8ff;border-radius:11px;display:grid;place-items:center;font-size:17px}.card h3{margin:14px 0 5px;font-size:16px}.card p{margin:0;color:#9da1b4;font-size:13px}
+.prices{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.price{background:#121420;border:1px solid var(--line);border-radius:16px;padding:21px;display:flex;flex-direction:column;min-height:240px}.price.featured{border-color:#9d83ff;box-shadow:0 0 35px #8b70f51c}.price h3{margin:0;font-size:16px}.amount{font-size:30px;font-weight:850;letter-spacing:-.04em;margin:12px 0}.amount small{font-size:12px;color:var(--muted);font-weight:500}.price p{font-size:12px;color:var(--muted);margin:0 0 18px}.price .btn{margin-top:auto;width:100%}
+.payment-area{display:grid;grid-template-columns:1fr 1fr;gap:17px}.panel{border:1px solid var(--line);background:#121420eF;border-radius:17px;padding:23px}.methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.method{padding:13px;border:1px solid #303247;border-radius:12px;background:#ffffff05;color:#ddddec;text-align:left;cursor:pointer}.method.active{border-color:#aa92ff;background:#9d83ff17;color:white}.method b{display:block;font-size:13px}.method small{color:#999db2}.field{display:block;width:100%;background:#090b12;border:1px solid #303247;border-radius:10px;padding:12px;color:white;margin:9px 0 13px;outline:none}.field:focus{border-color:#a78bfa}.hint{font-size:12px;color:#969bb0}.status{display:flex;gap:8px;align-items:center;color:#bfc3d3;font-size:12px}
+.owners{display:grid;grid-template-columns:1fr 1fr;gap:13px;max-width:700px;margin:auto}.owner{display:flex;align-items:center;justify-content:space-between;background:#121420;border:1px solid var(--line);padding:17px;border-radius:13px}.owner strong{font-size:15px}.online{font-size:11px;color:#70e2ad;display:flex;align-items:center;gap:7px}
+.settings-layout{display:grid;grid-template-columns:220px 1fr;gap:14px;max-width:900px;margin:auto}.tabs{display:flex;flex-direction:column;gap:6px;padding:10px;background:#121420;border:1px solid var(--line);border-radius:14px}.tab{background:transparent;border:0;color:#aeb2c5;text-align:left;padding:11px;border-radius:9px;cursor:pointer}.tab.active{background:#9477f526;color:#e2d9ff}.settings-box{background:#121420;border:1px solid var(--line);border-radius:14px;padding:20px;min-height:290px}.setting-row{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:13px 0;border-bottom:1px solid #ffffff0d}.setting-row:last-child{border:0}.setting-row small{display:block;color:#9297ab}.toggle{accent-color:#9e82ff;width:18px;height:18px}.settings-box select,.settings-box input[type=text]{background:#090b12;color:#eee;border:1px solid #33364a;border-radius:8px;padding:8px}
+footer{border-top:1px solid #ffffff12;padding:25px 0;color:#85899d;font-size:12px}.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);opacity:0;background:#202235;border:1px solid #514576;padding:10px 15px;border-radius:10px;transition:.25s;z-index:10;font-size:13px}.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+.order-modal{position:fixed;inset:0;background:#03040bdc;backdrop-filter:blur(9px);display:none;align-items:center;justify-content:center;padding:20px;z-index:30}
+.order-modal.open{display:flex}.order-card{width:min(440px,100%);background:#151725;border:1px solid #9f83ff66;border-radius:18px;padding:25px;box-shadow:0 25px 90px #000b;animation:fadeup .25s ease}
+.order-card h3{font-size:23px;margin:5px 0}.order-code{font-size:42px;letter-spacing:.18em;font-weight:900;text-align:center;color:#d2c4ff;background:#090b13;border:1px dashed #8d75df;border-radius:13px;padding:17px;margin:18px 0;font-variant-numeric:tabular-nums}
+.order-meta{color:#aeb2c5;font-size:13px;margin:5px 0 16px}.order-actions{display:flex;gap:9px}.order-actions button{flex:1;cursor:pointer}
+
+@media(max-width:850px){.hero{grid-template-columns:1fr;padding-top:55px}.preview-frame{max-width:700px}.prices{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:repeat(2,1fr)}nav{display:none}}
+@media(max-width:580px){.cards,.prices,.payment-area,.owners{grid-template-columns:1fr}.settings-layout{grid-template-columns:1fr}.tabs{display:grid;grid-template-columns:1fr 1fr}.hero{gap:25px}.preview-frame img{max-height:240px}}
+
+/* FOXY animated ambient background */
+body{isolation:isolate}
+body:before,body:after{content:"";position:fixed;z-index:-2;pointer-events:none;border-radius:50%;filter:blur(85px);opacity:.8;will-change:transform}
+body:before{width:58vw;height:58vw;min-width:420px;min-height:420px;top:-22vw;left:-12vw;background:radial-gradient(circle,#7954ef55 0%,#4c39b333 38%,transparent 70%);animation:foxyBlobA 17s ease-in-out infinite alternate}
+body:after{width:62vw;height:62vw;min-width:440px;min-height:440px;right:-24vw;bottom:-25vw;background:radial-gradient(circle,#a16cff42 0%,#4936b52b 42%,transparent 70%);animation:foxyBlobB 21s ease-in-out infinite alternate}
+.ambient-grid{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.16;background-image:linear-gradient(#a78bfa12 1px,transparent 1px),linear-gradient(90deg,#a78bfa12 1px,transparent 1px);background-size:54px 54px;mask-image:radial-gradient(ellipse at center,black,transparent 78%);animation:gridDrift 35s linear infinite}
+@keyframes foxyBlobA{0%{transform:translate3d(0,0,0) scale(.9)}50%{transform:translate3d(27vw,19vh,0) scale(1.18)}100%{transform:translate3d(7vw,38vh,0) scale(1.02)}}
+@keyframes foxyBlobB{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-24vw,-20vh,0) scale(.88)}100%{transform:translate3d(-8vw,-35vh,0) scale(1.2)}}
+@keyframes gridDrift{to{background-position:108px 108px}}
+@media(prefers-reduced-motion:reduce){body:before,body:after,.ambient-grid{animation:none}}
+.spotify-panel{max-width:900px;margin:auto;border:1px solid var(--line);background:linear-gradient(145deg,#151724ed,#10111aee);border-radius:18px;padding:22px}
+.spotify-controls{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}
+.spotify-controls input{flex:1;min-width:210px;background:#090b12;color:white;border:1px solid #33364a;border-radius:10px;padding:12px}
+.spotify-frame{width:100%;height:352px;border:0;border-radius:13px;background:#090b12}
+.spotify-note{font-size:12px;color:#989db2;margin-top:12px}
+
+
+.cookie-banner{position:fixed;left:20px;right:20px;bottom:20px;z-index:50;max-width:760px;margin:auto;background:#171927f5;border:1px solid #9f83ff66;border-radius:16px;padding:20px;box-shadow:0 20px 70px #000b;backdrop-filter:blur(15px);display:none}
+.cookie-banner.show{display:block;animation:fadeup .3s ease}.cookie-banner h3{margin:0 0 7px;font-size:17px}.cookie-banner p{margin:6px 0;color:#b4b8ca;font-size:12px}.cookie-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.cookie-actions button{cursor:pointer}
+
+</style>
+</head>
+<body>
+<div class="ambient-grid"></div>
+<div class="wrap">
+<header class="top"><a class="brand" href="#"><span class="logo">F</span> FOXY CLIENT</a><nav><a href="#features">Funkcje</a><a href="#plans">Plany</a><a href="#spotify">Spotify</a><a href="#settings">Ustawienia</a><a href="#owners">Ownerzy</a></nav><a class="discord" target="_blank" rel="noopener" href="https://discord.gg/AdrbaSMu5">Discord ↗</a></header>
+<main>
+<div class="hero"><div><div class="tag"><span class="green"></span> FOXY CLIENT · 26.2</div><h1>Play your way.<br><span>Foxy Client.</span></h1><p class="lead">Przejrzysty klient, personalizacja i wygodne zarządzanie ustawieniami. Zobacz plany i wybierz metode platnosci.</p><div class="hero-actions"><a class="btn primary" href="#plans">Zobacz plany ↓</a><a class="btn" target="_blank" rel="noopener" href="https://discord.gg/AdrbaSMu5">Dolacz na Discord ↗</a></div></div>
+<div class="preview-frame"><img src="assets/client-preview.png" alt="Podglad interfejsu klienta Minecraft"><div class="preview-caption"><span>FOXY CLIENT / IN-GAME INTERFACE</span><span>26.2</span></div></div></div>
+<section id="features"><div class="heading"><div class="eyebrow">Funkcje</div><h2>Wszystko pod reka.</h2><p>Nowoczesny wyglad, przejrzyste menu i opcje, ktore mozesz dopasowac do siebie.</p></div><div class="cards">
+<div class="card"><div class="ico">✦</div><h3>Personalizacja</h3><p>Dopasuj motyw i ustawienia interfejsu do wlasnego stylu.</p></div><div class="card"><div class="ico">♫</div><h3>Music player</h3><p>Panel muzyki, lista utworow, pauza i regulacja glosnosci.</p></div><div class="card"><div class="ico">⌘</div><h3>Dashboard</h3><p>Najwazniejsze informacje i skroty dostepne w jednym miejscu.</p></div><div class="card"><div class="ico">♙</div><h3>Profile i rangi</h3><p>Oznaczenia CEO, VIP i Owner przy nazwie konta.</p></div><div class="card"><div class="ico">⚙</div><h3>Ustawienia</h3><p>Duzy zestaw ustawien interfejsu z dzialajacymi kontrolkami.</p></div><div class="card"><div class="ico">⌑</div><h3>Licencje</h3><p>Plany dostepu i aktywacja licencji po kontakcie z administracja.</p></div>
+</div></section>
+<section id="plans"><div class="heading"><div class="eyebrow">Cennik</div><h2>Wybierz swoj plan.</h2><p>Wybierz plan, a nastepnie metode platnosci. Zamowienia sa potwierdzane przez administracje na Discordzie.</p></div><div class="prices">
+<div class="price"><h3>7 Days</h3><div class="amount">30 zl</div><p>Dostep na 7 dni.</p><button class="btn" onclick="choosePlan('7 Days')">Wybierz plan</button></div>
+<div class="price"><h3>1 Month</h3><div class="amount">80 zl</div><p>Dostep na 30 dni.</p><button class="btn" onclick="choosePlan('1 Month')">Wybierz plan</button></div>
+<div class="price featured"><h3>Lifetime</h3><div class="amount">150 zl</div><p>Dostep bezterminowy.</p><button class="btn primary" onclick="choosePlan('Lifetime')">Wybierz plan</button></div>
+</section>
+<section id="payments"><div class="heading"><div class="eyebrow">Platnosci</div><h2>Wybierz metode platnosci.</h2><p>Dostepne metody: Litecoin, PSC, myPSC i kod BLIK.</p></div><div class="payment-area">
+<div class="panel"><h3>Twoje zamowienie</h3><label class="hint" for="plan">Wybrany plan</label><select id="plan" class="field"><option>7 Days — 30 zl</option><option>1 Month — 80 zl</option><option selected>Lifetime — 150 zl</option></select><div class="hint">Metoda platnosci</div><div class="methods">
+<button class="method active" data-method="Litecoin" onclick="chooseMethod(this)"><b>Ł Litecoin</b><small>Kryptowaluta</small></button><button class="method" data-method="Kod PSC" onclick="chooseMethod(this)"><b>PSC</b><small>Kod paysafecard</small></button><button class="method" data-method="myPSC" onclick="chooseMethod(this)"><b>myPSC</b><small>Platnosc myPSC</small></button><button class="method" data-method="Kod BLIK" onclick="chooseMethod(this)"><b>BLIK</b><small>Kod BLIK</small></button></div><label class="hint" for="buyer">Nazwa uzytkownika Discord</label><input class="field" id="buyer" type="text" placeholder="np. twoj_nick">
+<label class="hint" style="display:flex;gap:9px;align-items:flex-start;margin:10px 0 14px">
+<input type="checkbox" id="orderIpConsent" style="accent-color:#a78bfa;margin-top:3px">
+<span>Czy akceptujesz Pliki Cookies. Zgoda jest dobrowolna.</span>
+</label><button class="btn primary" style="width:100%" onclick="sendOrder()">Przejdz do zamowienia ↗</button></div>
+<div class="panel"><h3>Jak dokonac platnosci?</h3><p class="hint">Wybierz plan i metode, a potem skontaktuj sie z administracja na oficjalnym Discordzie. Otrzymasz aktualne dane do platnosci i instrukcje.</p><div class="setting-row"><span><b>Litecoin</b><small>Adres portfela przekazuje administracja.</small></span><span>Ł</span></div><div class="setting-row"><span><b>Kod PSC / myPSC</b><small>Kod przekazuj tylko w oficjalnym tickecie.</small></span><span>PSC</span></div><div class="setting-row"><span><b>Kod BLIK</b><small>Instrukcje platnosci otrzymasz od administracji.</small></span><span>BLIK</span></div><p class="hint">Ta strona nie pobiera platnosci automatycznie i nie przechowuje kodow ani danych platniczych.</p><a class="btn" target="_blank" rel="noopener" href="https://discord.gg/AdrbaSMu5">Otworz Discord ↗</a></div>
+</div></section>
+
+<section id="spotify"><div class="heading"><div class="eyebrow">Music</div><h2>Spotify w Foxy Client.</h2><p>Wklej link do playlisty, albumu lub podcastu Spotify i odtworz go w osadzonym odtwarzaczu.</p></div>
+<div class="spotify-panel"><div class="status"><i class="green"></i> Spotify Embed Player</div>
+<div class="spotify-controls"><input id="spotifyUrl" type="url" placeholder="Wklej link Spotify, np. https://open.spotify.com/playlist/..."><button class="btn primary" onclick="loadSpotify()">Polacz Spotify</button><button class="btn" onclick="clearSpotify()">Wyczysc</button></div>
+<iframe id="spotifyFrame" class="spotify-frame" title="Spotify player" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<div class="spotify-note">To oficjalny odtwarzacz Spotify Embed. Zaloguj sie w Spotify, jesli odtwarzacz o to poprosi. Pelna kontrola odtwarzania przez konto Spotify wymaga osobnej autoryzacji OAuth i konfiguracji aplikacji Spotify.</div></div></section>
+<section id="settings"><div class="heading"><div class="eyebrow">Personalizacja</div><h2>Ustawienia klienta.</h2><p>Zakladki i kontrolki dzialaja lokalnie w tej stronie. Zmiany sa zapamietywane w przegladarce.</p></div><div class="settings-layout"><div class="tabs" id="tabs">
+<button class="tab active" data-tab="general">Glowne</button><button class="tab" data-tab="appearance">Wyglad</button><button class="tab" data-tab="interface">Interfejs</button><button class="tab" data-tab="sound">Dzwiek</button><button class="tab" data-tab="game">Gra</button><button class="tab" data-tab="privacy">Prywatnosc</button><button class="tab" data-tab="performance">Wydajnosc</button><button class="tab" data-tab="language">Jezyk</button>
+</div><div class="settings-box" id="settingsContent"></div></div></section>
+<section id="owners"><div class="heading"><div class="eyebrow">Team</div><h2>Ownerzy Foxy Client.</h2><p>Administracja projektu.</p></div><div class="owners"><div class="owner"><strong>5vv2 <span style="color:#c4b5fd;font-size:10px">OWNER</span></strong><span class="online"><i class="green"></i> Online</span></div><div class="owner"><strong>4vv2 <span style="color:#c4b5fd;font-size:10px">OWNER</span></strong><span class="online"><i class="green"></i> Online</span></div></div></section>
+<section id="credits"><div class="heading"><div class="eyebrow">Credits</div><h2>Foxy Client</h2><p>Created by 5vv2 &amp; 4vv2. Dziekujemy za korzystanie z projektu.</p><a class="btn" target="_blank" rel="noopener" href="https://discord.gg/AdrbaSMu5">Discord community ↗</a></div></section>
+</main>
+<footer><div class="foot"><span>© 2026 Foxy Client · Version 26.2</span><span>Platnosci i status ownerow wymagaja recznej obslugi administracji.</span></div></footer>
+</div>
+<div class="order-modal" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
+ <div class="order-card"><div class="eyebrow">ZAMOWIENIE UTWORZONE</div><h3 id="orderTitle">Twoj kod zamowienia</h3>
+ <div class="order-code" id="orderCode">------</div>
+ <div class="order-meta" id="orderPlan"></div><div class="hint">Zapisz ten kod i podaj go administracji na Discordzie. Kod zostal wyslany do obslugi zamowien.</div>
+ <div class="order-actions" style="margin-top:18px"><button class="btn" onclick="copyOrderCode()">Kopiuj kod</button><button class="btn primary" onclick="closeOrder()">Gotowe</button></div>
+ </div>
+</div>
+
+
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-modal="true" aria-labelledby="cookieTitle">
+ <h3 id="cookieTitle">Czy akceptujesz pliki cookie?</h3>
+ <p>Strona uzywa pamieci lokalnej do zapisywania ustawien. Mozesz zaakceptowac lub odrzucic opcjonalne cookies.</p>
+ <p><b>Informacja o adresie IP:</b> jesli osobno zaznaczysz zgode ponizej, przy tej wizycie wyslemy adres IP, date i godzine oraz informacje o przegladarce do administracji Foxy Client przez Discord webhook. Zgoda jest dobrowolna i nie jest wymagana do korzystania ze strony.</p>
+ <label style="display:flex;gap:9px;align-items:flex-start;color:#e4e2ef;font-size:12px;margin-top:12px"><input type="checkbox" id="ipConsent" style="accent-color:#a78bfa;margin-top:3px"> Czy akceptujesz pliki cookie?</label>
+ <div class="cookie-actions"><button class="btn primary" onclick="acceptCookieChoices()">Akceptuj wybrane</button><button class="btn" onclick="rejectCookieChoices()">Odrzuc opcjonalne</button></div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+const toast=(s)=>{let t=document.getElementById('toast');t.textContent=s;t.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove('show'),2600)};
+function choosePlan(p){let s=document.getElementById('plan');let opts=[...s.options];let i=opts.findIndex(o=>o.textContent.startsWith(p));if(i>=0)s.selectedIndex=i;document.getElementById('payments').scrollIntoView({behavior:'smooth'});toast('Wybrano plan: '+p)}
+function chooseMethod(el){document.querySelectorAll('.method').forEach(x=>x.classList.remove('active'));el.classList.add('active');}
+async function sendOrder(){
+ let nick=document.getElementById('buyer').value.trim();
+ let plan=document.getElementById('plan').value;
+ let method=document.querySelector('.method.active').dataset.method;
+ if(!nick){toast('Wpisz nazwe uzytkownika Discord.');return}
+ try{
+  const res=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan,method,discordName:nick,ipConsent:document.getElementById('orderIpConsent')?.checked===true})});
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error||'Nie udalo sie utworzyc zamowienia.');
+  document.getElementById('orderCode').textContent=data.code;
+  document.getElementById('orderPlan').textContent='Plan: '+data.plan+' · Platnosc: '+data.method+' · Discord: '+nick;
+  document.getElementById('orderModal').classList.add('open');
+ }catch(err){toast(err.message+' Uruchom strone przez serwer Node.js.')}
+}
+function closeOrder(){document.getElementById('orderModal').classList.remove('open')}
+function copyOrderCode(){let c=document.getElementById('orderCode').textContent;navigator.clipboard?.writeText(c).then(()=>toast('Kod skopiowany.')).catch(()=>toast('Kod: '+c))}
+
+const defs={
+general:[['Uruchamiaj z systemem','toggle',true],['Automatyczne sprawdzanie aktualizacji','toggle',true],['Pokazuj powiadomienia','toggle',true],['Minimalizuj po starcie','toggle',false]],
+appearance:[['Motyw','select',['Dark','Midnight','Purple']],['Przezroczystosc panelu','range',85],['Zaokraglenie kart','range',12],['Efekty tla','toggle',true]],
+interface:[['Animacje interfejsu','toggle',true],['Podpowiedzi','toggle',true],['Kompaktowe menu','toggle',false],['Pokazuj status w panelu','toggle',true]],
+sound:[['Dzwiek klikniecia','toggle',true],['Glosnosc efektow','range',65],['Muzyka w tle','toggle',false],['Glosnosc muzyki','range',35]],
+game:[['Pokazuj overlay w grze','toggle',true],['Przypnij panel na wierzchu','toggle',false],['Skala interfejsu','range',100],['Tryb wydajnosci','toggle',false]],
+privacy:[['Pokazuj status online','toggle',true],['Zbieranie anonimowych statystyk','toggle',false],['Ukrywaj nick na screenach','toggle',false],['Potwierdzaj wazne akcje','toggle',true]],
+performance:[['Ogranicz animacje','toggle',false],['Oszczedzanie zasobow','toggle',false],['Limit FPS interfejsu','range',120],['Czysc podreczna pamiec przy starcie','toggle',false]],
+language:[['Jezyk','select',['Polski','English']],['Format daty','select',['DD.MM.RRRR','MM/DD/YYYY']],['Powiadomienia systemowe','toggle',true]]
+};
+function renderSettings(tab){let box=document.getElementById('settingsContent');box.innerHTML='<h3>'+({general:'Glowne',appearance:'Wyglad',interface:'Interfejs',sound:'Dzwiek',game:'Gra',privacy:'Prywatnosc',performance:'Wydajnosc',language:'Jezyk'}[tab])+'</h3>';defs[tab].forEach((d,i)=>{let key='foxy_'+tab+'_'+i;let saved=localStorage.getItem(key);let row=document.createElement('div');row.className='setting-row';let label=document.createElement('div');label.innerHTML='<b>'+d[0]+'</b><small>Ustawienie zapisuje sie lokalnie.</small>';let control;if(d[1]==='toggle'){control=document.createElement('input');control.type='checkbox';control.className='toggle';control.checked=saved===null?d[2]:saved==='true';control.onchange=()=>{localStorage.setItem(key,control.checked);toast('Zapisano ustawienie')}}else if(d[1]==='range'){control=document.createElement('input');control.type='range';control.min=0;control.max=d[2]===120?240:100;control.value=saved??d[2];let v=document.createElement('span');v.textContent=control.value;control.oninput=()=>v.textContent=control.value;control.onchange=()=>{localStorage.setItem(key,control.value);toast('Zapisano ustawienie')};let wrap=document.createElement('span');wrap.append(control,v);control=wrap}else{control=document.createElement('select');d[2].forEach(x=>{let o=document.createElement('option');o.textContent=x;control.append(o)});control.value=saved??d[2][0];control.onchange=()=>{localStorage.setItem(key,control.value);toast('Zapisano ustawienie')}}row.append(label,control);box.append(row)})}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderSettings(b.dataset.tab)}));
+
+function spotifyEmbedUrl(raw){
+ try{
+  const u=new URL(raw.trim());
+  if(!['open.spotify.com','www.open.spotify.com'].includes(u.hostname)) return null;
+  const parts=u.pathname.split('/').filter(Boolean);
+  if(parts.length<2) return null;
+  const type=parts[0], id=parts[1];
+  if(!['playlist','album','track','episode','show'].includes(type) || !/^[A-Za-z0-9]+$/.test(id)) return null;
+  return 'https://open.spotify.com/embed/'+type+'/'+id+'?utm_source=generator';
+ }catch(e){return null}
+}
+function loadSpotify(){
+ const input=document.getElementById('spotifyUrl');
+ const url=spotifyEmbedUrl(input.value);
+ if(!url){toast('Wklej poprawny link do playlisty, albumu lub utworu Spotify.');return}
+ document.getElementById('spotifyFrame').src=url;
+ localStorage.setItem('foxy_spotify_url',input.value.trim());
+ toast('Zaladowano odtwarzacz Spotify.');
+}
+function clearSpotify(){
+ document.getElementById('spotifyUrl').value='';
+ document.getElementById('spotifyFrame').src='about:blank';
+ localStorage.removeItem('foxy_spotify_url');
+ toast('Wyczyszczono odtwarzacz.');
+}
+const savedSpotify=localStorage.getItem('foxy_spotify_url');
+if(savedSpotify){document.getElementById('spotifyUrl').value=savedSpotify;const savedEmbed=spotifyEmbedUrl(savedSpotify);if(savedEmbed)document.getElementById('spotifyFrame').src=savedEmbed;}
+
+
+async function sendVisitConsent(){
+ try{
+  const r=await fetch('/api/visit-consent',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({consent:true})});
+  if(!r.ok)throw new Error('consent endpoint unavailable');
+ }catch(e){toast('Nie udalo sie zapisac zgody. Sprobuj ponownie.')}
+}
+function acceptCookieChoices(){
+ const ip=document.getElementById('ipConsent').checked;
+ localStorage.setItem('foxy_cookie_choice','accepted');
+ localStorage.setItem('foxy_ip_consent',ip?'yes':'no');
+ document.getElementById('cookieBanner').classList.remove('show');
+ if(ip)sendVisitConsent();
+}
+function rejectCookieChoices(){
+ localStorage.setItem('foxy_cookie_choice','rejected');
+ localStorage.setItem('foxy_ip_consent','no');
+ document.getElementById('cookieBanner').classList.remove('show');
+}
+if(!localStorage.getItem('foxy_cookie_choice')){
+ window.addEventListener('load',()=>document.getElementById('cookieBanner').classList.add('show'));
+}
+
+renderSettings('general');
+document.addEventListener('click',e=>{
+ if(!e.target.closest('button,.btn,.discord'))return;
+ try{
+  let ctx=window.__foxyAudio||(window.__foxyAudio=new(window.AudioContext||window.webkitAudioContext)());
+  if(ctx.state==='suspended')ctx.resume();
+  const now=ctx.currentTime;
+  const master=ctx.createGain();master.gain.setValueAtTime(.0001,now);master.gain.exponentialRampToValueAtTime(.105,now+.012);master.gain.exponentialRampToValueAtTime(.0001,now+.19);master.connect(ctx.destination);
+  const osc=ctx.createOscillator();osc.type='sine';osc.frequency.setValueAtTime(620,now);osc.frequency.exponentialRampToValueAtTime(880,now+.075);osc.frequency.exponentialRampToValueAtTime(520,now+.18);
+  const tone=ctx.createGain();tone.gain.value=1;osc.connect(tone);tone.connect(master);osc.start(now);osc.stop(now+.2);
+ }catch(err){}
+});
+</script>
+</body></html>
